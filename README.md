@@ -1,4 +1,4 @@
-# Starter folder
+# Relationship between Election Sesaon and Currency Fluctuation 
 examine relationship between election season and currency fluctuation
 
 ## Overview
