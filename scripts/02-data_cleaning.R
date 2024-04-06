@@ -1,44 +1,81 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Cleans the raw data, keeping only variables we need to explore
+# Author: Sandy Yu
+# Date: 2 April 2024
+# Contact: jingying.yu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: downloaded appropriate datasets and understood what variables needed keeping.
+
 
 #### Workspace setup ####
 library(tidyverse)
+library(readr)
+library(arrow)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+raw_exchange_rate <- read_csv("data/raw_data/raw_exchange_rate.csv")
+raw_inauguration <- read_csv("data/raw_data/raw_inauguration.csv")
 
-cleaned_data <-
-  raw_data |>
+cleaned_exchange_rate <-
+  raw_exchange_rate |>
   janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
+  filter(date >= "1969-01-20" & dexcaus != ".") |> 
+  rename(exchange_rate = dexcaus) |> 
   tidyr::drop_na()
 
+
+cleaned_inauguration <-
+  raw_inauguration |>
+  janitor::clean_names() |>
+  filter(inauguration_date >= "1974-08-09") |>
+  select(president, party, inauguration_date) |>
+  mutate(change_party = as.integer(lag(party) != party & !is.na(lag(party)))) |>
+  tidyr::drop_na()
+
+
+
+
+
+
+# Separate the exchange rate into 2 files, one containing the rate not contain inauguration week 
+# Where the date of the inauguration is the 4th day, that is inauguration date +-3 days is the inauguration week
+# The other file containing ONLY exchange rates during inauguration week.
+
+cleaned_inauguration$inauguration_date <- as.Date(cleaned_inauguration$inauguration_date)
+cleaned_exchange_rate$date <- as.Date(cleaned_exchange_rate$date)
+
+# Define a function to get the exchange rates around each inauguration date and add change_party column
+get_date_range <- function(inauguration_date, change_party, cleaned_exchange_rate) {
+  date_range <- seq(inauguration_date - 3, inauguration_date + 3, by = "days")
+  rates <- cleaned_exchange_rate %>% filter(date %in% date_range)
+  rates$change_party <- change_party
+  return(rates)
+}
+
+# Apply the function to each row in the inauguration dataframe
+list_of_df <- mapply(get_date_range, 
+                     cleaned_inauguration$inauguration_date, 
+                     cleaned_inauguration$change_party, 
+                     MoreArgs = list(cleaned_exchange_rate = cleaned_exchange_rate),
+                     SIMPLIFY = FALSE)
+
+# Combine the list of dataframes into one
+inaug_exchange_rate <- bind_rows(list_of_df)
+
+# Remove the gathered exchange rates from the original exchange rate dataframe
+exchange_rate_remaining <- cleaned_exchange_rate %>%
+  anti_join(inaug_exchange_rate, by = "date")
+
+
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+# write_csv(cleaned_exchange_rate, "data/analysis_data/cleaned_exchange_rate.csv")
+write_parquet(cleaned_exchange_rate, "data/analysis_data/cleaned_exchange_rate.parquet")
+
+# write_csv(cleaned_inauguration, "data/analysis_data/cleaned_inauguration.csv")
+write_parquet(cleaned_exchange_rate, "data/analysis_data/cleaned_inauguration.parquet")
+
+# write_csv(inaug_exchange_rate, "data/analysis_data/inaug_exchange_rate.csv")
+write_parquet(inaug_exchange_rate, "data/analysis_data/inaug_exchange_rate.parquet")
+
+# write_csv(exchange_rate_remaining, "data/analysis_data/exchange_rate_remaining.csv")
+write_parquet(exchange_rate_remaining, "data/analysis_data/exchange_rate_remaining.parquet")

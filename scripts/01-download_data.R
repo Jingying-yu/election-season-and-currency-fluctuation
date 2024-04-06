@@ -5,7 +5,7 @@
 # Contact: jingying.yu@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: Research on whether the sources are trustworthy and consider which datasets are necessary
-
+# Please see the below notes on source of inauguration raw data.
 
 
 #### Workspace setup ####
@@ -18,13 +18,11 @@ raw_exchange_rate <- read_csv(
   show_col_types = FALSE
 )
 
-raw_election_results <- read_csv(
-  file = "",
-  show_col_types = FALSE
-)
+#inauguration data is pulled from two different sources: US Census Bureau website & Frank LaRose Ohio Secretary of State website.
+#Due to difficulty in extraction of data, I have hand-extracted data from the two websites into a single csv file and uploaded it into the data/raw_data folder.
+# The inauguration dataset will be direcly read and cleaned using R, and the process will be in the scripts/02-data_cleaning.R script
 
 
 #### Save data ####
-write_csv(raw_exchange_rate, "inputs/data/raw_exchange_rate.csv") 
+write_csv(x = raw_exchange_rate, file ="data/raw_data/raw_exchange_rate.csv") 
 
-write_csv(raw_election_results, "inputs/data/raw_election_results.csv") 
