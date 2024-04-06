@@ -20,7 +20,7 @@ cleaned_exchange_rate <-
   raw_exchange_rate |>
   janitor::clean_names() |>
   filter(date >= "1969-01-20" & dexcaus != ".") |> 
-  rename(exchange_rate = dexcaus) |> 
+  rename(exchange_rate = dexcaus) |> mutate(exchange_rate = as.numeric(exchange_rate))
   tidyr::drop_na()
 
 
@@ -72,7 +72,7 @@ exchange_rate_remaining <- cleaned_exchange_rate %>%
 write_parquet(cleaned_exchange_rate, "data/analysis_data/cleaned_exchange_rate.parquet")
 
 # write_csv(cleaned_inauguration, "data/analysis_data/cleaned_inauguration.csv")
-write_parquet(cleaned_exchange_rate, "data/analysis_data/cleaned_inauguration.parquet")
+write_parquet(cleaned_inauguration, "data/analysis_data/cleaned_inauguration.parquet")
 
 # write_csv(inaug_exchange_rate, "data/analysis_data/inaug_exchange_rate.csv")
 write_parquet(inaug_exchange_rate, "data/analysis_data/inaug_exchange_rate.parquet")
