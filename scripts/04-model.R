@@ -11,27 +11,28 @@
 #### Workspace setup ####
 library(tidyverse)
 library(rstanarm)
+library(arrow)
 
 #### Read data ####
-analysis_data <- read_csv("data/analysis_data/analysis_data.csv")
+exchange_inaug <- read_parquet("data/analysis_data/exchange_inaug.parquet")
 
 ### Model data ####
-first_model <-
+inaug_model <-
   stan_glm(
-    formula = flying_time ~ length + width,
-    data = analysis_data,
+    formula = exchange_rate ~ inauguration_period + change_party,
+    data = exchange_inaug,
     family = gaussian(),
     prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
     prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
     prior_aux = exponential(rate = 1, autoscale = TRUE),
-    seed = 853
+    seed = 21
   )
 
 
 #### Save model ####
 saveRDS(
-  first_model,
-  file = "models/first_model.rds"
+  inaug_model,
+  file = "models/inaug_model.rds"
 )
 
 
