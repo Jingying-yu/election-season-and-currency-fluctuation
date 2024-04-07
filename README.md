@@ -12,7 +12,7 @@ US Presidential Election Result data gathered from [United States Census Bureau]
 
 The repo is structured as:
 
--   `data/raw_data` contains the raw data as obtained from X.
+-   `data/raw_data` contains the raw data as obtained from FRED, United States Census Bureau and Frank LaRose Ohio Secretary of State.
 -   `data/analysis_data` contains the cleaned dataset that was constructed.
 -   `model` contains fitted models.
 -   `other` contains relevant literature, details about LLM chat interactions, and sketches.

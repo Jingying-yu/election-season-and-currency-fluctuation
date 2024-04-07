@@ -36,9 +36,9 @@ class(exchange_rate_remaining$date) == "Date"
 class(exchange_rate_remaining$exchange_rate) == "numeric"
 
 
-# Test for any missing values in both datasets
+# Test for any missing values in the datasets
+all(complete.cases(cleaned_inauguration)) == TRUE
+all(complete.cases(cleaned_exchange_rate)) == TRUE
 all(complete.cases(inaug_exchange_rate)) == TRUE
-
-
 all(complete.cases(exchange_rate_remaining)) == TRUE
 
