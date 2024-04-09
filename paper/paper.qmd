@@ -115,8 +115,8 @@ Our results are summarized in @tbl-modelresults.
 
 library(rstanarm)
 
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
+inaug_model <-
+  readRDS(file = here::here("models/inaug_model.rds"))
 ```
 
 ```{r}
@@ -128,7 +128,7 @@ first_model <-
 
 modelsummary::modelsummary(
   list(
-    "First model" = first_model
+    "Inauguration model" = inaug_model
   ),
   statistic = "mad",
   fmt = 2
