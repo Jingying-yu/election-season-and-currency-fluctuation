@@ -135,11 +135,14 @@ modelsummary::modelsummary(
     "Inauguration model" = inaug_model
   ),
   statistic = "mad",
-  fmt = 2
+  fmt = 2,
+  metrics = c("R2")
 )
 ```
 
 ```{r}
+colors <- c("No Inauguration Announcement" = "yellow", "Inauguration Announcement" = "blue")
+
 exchange_inaug |>
   ggplot(aes(
     x = date,
@@ -149,71 +152,78 @@ exchange_inaug |>
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 0),
     method = "lm",
-    color = "grey",
+    aes(color = "No Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1974-08-06" & date <= "1974-08-12"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1977-01-17" & date <= "1977-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1981-01-17" & date <= "1981-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1981-01-17" & date <= "1981-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1989-01-17" & date <= "1989-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1993-01-17" & date <= "1993-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "2001-01-17" & date <= "2001-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "2009-01-17" & date <= "2009-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "2017-01-17" & date <= "2017-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
   ) +
   geom_smooth(
     data = exchange_inaug |> filter(inauguration_period == 1 & date >= "2021-01-17" & date <= "2021-01-23"),
     method = "lm",
-    color = "blue",
+    aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
-  )
+  ) + scale_color_manual(values = colors) +
+  labs(
+    x = "Date",
+    y = "USD v.s. CAD Exchange Rate",
+    title = "Exchange Rate from 1974 to 2024",
+    color = "Period"
+  ) + theme(legend.position = "bottom")
 
 ```
+
 
 
 # Discussion
