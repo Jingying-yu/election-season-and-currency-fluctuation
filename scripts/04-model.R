@@ -11,10 +11,12 @@
 #### Workspace setup ####
 library(tidyverse)
 library(rstanarm)
+library(readr)
 library(arrow)
 
 #### Read data ####
-exchange_inaug <- read_parquet("data/analysis_data/exchange_inaug.parquet")
+#exchange_inaug <- read_parquet("data/analysis_data/exchange_inaug.parquet")
+inaug_period_exchange <- read_csv("data/analysis_data/inaug_period_exchange.csv", show_col_types = FALSE)
 
 ### Model data ####
 inaug_model <-
@@ -25,9 +27,21 @@ inaug_model <-
     prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
     prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
     prior_aux = exponential(rate = 1, autoscale = TRUE),
-    seed = 21
+   seed = 21
   )
 
+
+# Attempt alternative RDD approach, ABANDONED
+#inaug_period_model <-
+#  stan_glm(
+#    formula = exchange_rate ~ date + inauguration_period,
+#    data = inaug_period_exchange,
+#    family = gaussian(),
+#    prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
+#    prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
+#    prior_aux = exponential(rate = 1, autoscale = TRUE),
+#   seed = 21
+#  )
 
 #### Save model ####
 saveRDS(
@@ -35,4 +49,10 @@ saveRDS(
   file = "models/inaug_model.rds"
 )
 
+
+# alternative approach, ABANDONED
+#saveRDS(
+#  inaug_period_model,
+#  file = "models/inaug_period_model.rds"
+#)
 

@@ -66,9 +66,17 @@ for(i in 1:nrow(cleaned_inauguration)) {
   }
 }
 
-# Separate the exchange rate into 2 files, one containing the rate not contain inauguration week 
-# Where the date of the inauguration is the 4th day, that is inauguration date +-3 days is the inauguration week
-# The other file containing ONLY exchange rates during inauguration week.
+#alternative approach, ABANDONED
+#inaug_period_exchange <- exchange_inaug |> filter(inauguration_period == 1)
+#for(i in 1:nrow(cleaned_inauguration)) {
+  # Define the date range for each inauguration date
+#  date_range <- seq(cleaned_inauguration$inauguration_date[i] - 3,
+#                    cleaned_inauguration$inauguration_date[i] - 1,
+#                    by = 'day')
+#  date_indices <- which(inaug_period_exchange$date %in% date_range)
+#  inaug_period_exchange$inauguration_period[date_indices] <- 0  
+#}
+
 
 
 
@@ -81,11 +89,5 @@ write_parquet(cleaned_exchange_rate, "data/analysis_data/cleaned_exchange_rate.p
 # write_csv(cleaned_inauguration, "data/analysis_data/cleaned_inauguration.csv")
 write_parquet(cleaned_inauguration, "data/analysis_data/cleaned_inauguration.parquet")
 
+write_csv(exchange_inaug, "data/analysis_data/exchange_inaug.csv")
 write_parquet(exchange_inaug, "data/analysis_data/exchange_inaug.parquet")
-
-
-#write_csv(inaug_exchange_rate, "data/analysis_data/inaug_exchange_rate.csv")
-#write_parquet(inaug_exchange_rate, "data/analysis_data/inaug_exchange_rate.parquet")
-
-#write_csv(exchange_rate_remaining, "data/analysis_data/exchange_rate_remaining.csv")
-#write_parquet(exchange_rate_remaining, "data/analysis_data/exchange_rate_remaining.parquet")

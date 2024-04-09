@@ -1,15 +1,15 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "Effect of Election on Currency Fluctuation"
+subtitle: "Analysis of USD Exchange Rate Fluctuation during Inaugurtion week"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Sandy Yu
+thanks: "Code and data are available at: https://github.com/Jingying-yu/election-season-and-currency-fluctuation.git"
 date: today
 date-format: long
 abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
 number-sections: true
+toc: true
 bibliography: references.bib
 ---
 
@@ -19,7 +19,11 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(palmerpenguins)
+library(readr)
+library(rstanarm)
+library(knitr)
+library(modelsummary)
+library(ggplot2)
 ```
 
 
@@ -135,7 +139,81 @@ modelsummary::modelsummary(
 )
 ```
 
+```{r}
+exchange_inaug |>
+  ggplot(aes(
+    x = date,
+    y = exchange_rate
+  )) +
+  geom_point(alpha = 0.005) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 0),
+    method = "lm",
+    color = "grey",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1974-08-06" & date <= "1974-08-12"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1977-01-17" & date <= "1977-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1981-01-17" & date <= "1981-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1981-01-17" & date <= "1981-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1989-01-17" & date <= "1989-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "1993-01-17" & date <= "1993-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "2001-01-17" & date <= "2001-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "2009-01-17" & date <= "2009-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "2017-01-17" & date <= "2017-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  ) +
+  geom_smooth(
+    data = exchange_inaug |> filter(inauguration_period == 1 & date >= "2021-01-17" & date <= "2021-01-23"),
+    method = "lm",
+    color = "blue",
+    formula = "y ~ x"
+  )
 
+```
 
 
 # Discussion
