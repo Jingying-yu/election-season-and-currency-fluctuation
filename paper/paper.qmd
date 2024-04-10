@@ -44,13 +44,6 @@ Some of our data is of penguins (@fig-bills), from @palmerpenguins.
 #| fig-cap: Bills of penguins
 #| echo: false
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
 ```
 
 Talk more about it.
@@ -78,7 +71,7 @@ Talk way more about it.
 
 
 
-# Model
+# Model {#sec-model}
 
 The goal of our modelling strategy is twofold. Firstly,...
 
@@ -88,14 +81,26 @@ Here we briefly describe the Bayesian analysis model used to investigate... Back
 
 Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
 
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
+$$y_i|\mu_i, \sigma \sim \mbox{Normal}(\mu_i, \sigma)$$
+
+$$\mu_i = \alpha + \beta_i + \omega_i$$
+
+$$\alpha \sim \mbox{Normal}(0, 2.5)$$
+
+$$\beta \sim \mbox{Normal}(0, 2.5)$$
+
+$$\omega \sim \mbox{Normal}(0, 2.5)$$
+
+$$\sigma \sim \mbox{Exponential}(1)$$
+
+Where:
+
+-   $y_i$ is the daily exchange rate of USD v.s. CAD (base unit is CAD = 1)
+
+-   $\beta_i$ is a dummy variable (value is either 0 or 1) indicating whether the date is within the inauguration week (see data section for definition of inauguration week). If date is within the inauguration week, then the variable has a value of 1, and 0 otherwise.
+
+-   $\omega_i$ is a dummy variable indicating whether a change of political party occurred in the corresponding election season. Each inauguration week receives identical value (the whole week is either all 1 or all 0). Value of 1 indicates that the elected president's political party is different from last season's president's, 0 otherwise.
+
 
 We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
 
@@ -107,7 +112,7 @@ We expect a positive relationship between the size of the wings and time spent a
 We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
-# Results
+# Results {#sec-results}
 
 Our results are summarized in @tbl-modelresults.
 
@@ -140,6 +145,8 @@ modelsummary::modelsummary(
 )
 ```
 
+
+## Explaination for small R^2
 ```{r}
 colors <- c("No Inauguration Announcement" = "yellow", "Inauguration Announcement" = "blue")
 
@@ -226,13 +233,13 @@ exchange_inaug |>
 
 
 
-# Discussion
+# Discussion {#sec-discussion}
 
-## First discussion point {#sec-first-point}
+## Expectation of the population
 
 If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
 
-## Second discussion point
+## Change of Political Party
 
 ## Third discussion point
 
@@ -253,9 +260,10 @@ Weaknesses and next steps should also be included.
 
 ## Posterior predictive check
 
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
+In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. We can see that the regression outcome from our data and the simulation created by the posterior distribution are not closely matched. This is because our predictor variables only contribute to a small section of the data (40 out of 13358 observations has inauguration_period == 1, 30 out of 13358 has change_party == 1).
 
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
+In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. We can see that the estimation parameters shifts minimally after taking data into account. This suggests that good prior parameters were set.
+
 
 ```{r}
 #| eval: true
@@ -267,11 +275,11 @@ In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. Th
 #| fig-cap: "Examining how the model fits, and is affected by, the data"
 #| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
 
-pp_check(first_model) +
+pp_check(inaug_model) +
   theme_classic() +
   theme(legend.position = "bottom")
 
-posterior_vs_prior(first_model) +
+posterior_vs_prior(inaug_model) +
   theme_minimal() +
   scale_color_brewer(palette = "Set1") +
   theme(legend.position = "bottom") +
@@ -280,9 +288,11 @@ posterior_vs_prior(first_model) +
 
 ## Diagnostics
 
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
+@fig-stanareyouokay-1 is a trace plot. Trace plots are often used to diagnose abnormalities of models. For both plots, lines are oscillating vertically and maintains an overall horizontal trend. This suggests that there is nothing out of the ordinary for our model.
 
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
+
+@fig-stanareyouokay-2 is a Rhat plot. Rhat plot is a valuable tool for assessing convergence in Bayesian regression models, helping ensure the reliability and validity of the model's inference results. Both both plots, all data points are close to 1. This suggest that there is nothing out of the ordinary for our model.
+
 
 ```{r}
 #| echo: false
@@ -294,9 +304,9 @@ posterior_vs_prior(first_model) +
 #| fig-subcap: ["Trace plot", "Rhat plot"]
 #| layout-ncol: 2
 
-plot(first_model, "trace")
+plot(inaug_model, "trace")
 
-plot(first_model, "rhat")
+plot(inaug_model, "rhat")
 ```
 
 
