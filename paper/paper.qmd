@@ -37,7 +37,7 @@ The remainder of this paper is structured as follows. @sec-data....
 
 # Data {#sec-data}
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+## Data on Exchange Rate
 
 ```{r}
 #| label: fig-bills
@@ -46,9 +46,9 @@ Some of our data is of penguins (@fig-bills), from @palmerpenguins.
 
 ```
 
-Talk more about it.
+## Data on Election Results
 
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+### Selection of Data Source
 
 ```{r}
 #| label: fig-planes
@@ -57,17 +57,9 @@ And also planes (@fig-planes). (You can change the height and width, but don't w
 #| warning: false
 #| message: false
 
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
 ```
 
-Talk way more about it. 
+### Construction of Inauguration Week
 
 
 
