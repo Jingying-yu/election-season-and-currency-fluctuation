@@ -65,16 +65,24 @@ exchange_inaug |>
 ### Selection of Data Source
 
 ```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
+#| label: tbl-inauguration
+#| tbl-cap: Sample of past inauguration dates information
 #| echo: false
-#| warning: false
-#| message: false
+cleaned_inauguration <- read_csv(here::here("data/analysis_data/cleaned_inauguration.csv"), show_col_types = FALSE)
 
+knitr::kable(cleaned_inauguration, col.names = c("President", "Party", "Inauguration Date", "Change Party"), align = c("c", "c", "c", "c"))
 ```
 
 ### Construction of Inauguration Week
-$$Day1 \hspace{5mm} Day2 \hspace{5mm}  Day3 \hspace{7mm}  Inauguration\ Day \hspace{7mm} Day5 \hspace{5mm} Day6 \hspace{5mm} Day7$$
+$$Day1 \hspace{5mm} Day2 \hspace{5mm}  Day3 \hspace{7mm}  \textbf{Inauguration Day} \hspace{7mm} Day5 \hspace{5mm} Day6 \hspace{5mm} Day7$$
+```{r}
+#| label: tbl-exchange_inaug
+#| tbl-cap: Sample of the final dataset used for analysis
+#| echo: false
+sample_tbl <- exchange_inaug |> filter(date >= "1977-01-12" & date <= "1977-01-18")
+
+knitr::kable(sample_tbl, col.names = c("Date", "Exchange Rate", "Inauguration Period", "Change Party"), align = c("c", "c", "c", "c"))
+```
 
 
 # Model {#sec-model}
