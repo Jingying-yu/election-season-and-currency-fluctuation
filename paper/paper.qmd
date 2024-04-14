@@ -24,6 +24,7 @@ library(rstanarm)
 library(knitr)
 library(modelsummary)
 library(ggplot2)
+library(arrow)
 ```
 
 
@@ -40,10 +41,23 @@ The remainder of this paper is structured as follows. @sec-data....
 ## Data on Exchange Rate
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
+#| label: fig-exchange
+#| fig-cap: Exchange Rate from 1971 to 2024
 #| echo: false
 
+exchange_inaug <- read_csv(here::here("data/analysis_data/exchange_inaug.csv"), show_col_types = FALSE)
+
+exchange_inaug |>
+  ggplot(aes(
+    x = date,
+    y = exchange_rate
+  )) +
+  geom_line() +
+  labs(
+    x = "Year",
+    y = "Exchange Rate: USD to CAD (Base Currency: USD)",
+    title = "Exchange Rate from 1971 to 2024"
+  )
 ```
 
 ## Data on Election Results
@@ -87,7 +101,7 @@ $$\sigma \sim \mbox{Exponential}(1)$$
 
 Where:
 
--   $y_i$ is the daily exchange rate of USD v.s. CAD (base unit is CAD = 1)
+-   $y_i$ is the daily exchange rate of USD v.s. CAD (base unit is USD = 1)
 
 -   $\beta_i$ is a dummy variable (value is either 0 or 1) indicating whether the date is within the inauguration week (see data section for definition of inauguration week). If date is within the inauguration week, then the variable has a value of 1, and 0 otherwise.
 

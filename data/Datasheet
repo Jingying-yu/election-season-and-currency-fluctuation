@@ -1,13 +1,13 @@
 Motivation
 
 For what purpose was the dataset created? Was there a specific task in mind? Was there a specific gap that needed to be filled? Please provide a description.
-  The dataset was created to enable analysis of Australian politicians. We were unable to find a publicly available dataset in a structured format that had the biographical and political information on Australian politicians that was needed for modelling.
+  The dataset was created to enable analysis of the relationship between US presidential election result announcement and USD exchange rate fluctuation. We were unable to find a publicly available dataset in a structured format that had all the necessary elements that was needed for modelling.
   
 Who created the dataset (for example, which team, research group) and on behalf of which entity (for example, company, institution, organization)?
-  Rohan Alexander, while working at the Australian National University and the University of Toronto.
+  Sandy Yu, while studying at the University of Toronto as an undergraduate student.
   
 Who funded the creation of the dataset? If there is an associated grant, please provide the name of the grantor and the grant name and number.
-  No direct funding was received for this project, but Rohan received a salary from University of Toronto.
+  No funding was received for this project.
   
 Any other comments?
   No.
@@ -17,34 +17,33 @@ Any other comments?
 Composition
 
 What do the instances that comprise the dataset represent (for example, documents, photos, people, countries)? Are there multiple types of instances (for example, movies, users, and ratings; people and interactions between them; nodes and edges)? Please provide a description.
-  Each row of the main dataset is an individual, and these then link to other datasets where each row refers to various information about that person.
+  Each row of the final dataset (exchange_inaug) is an date with the range of 1971 - 2024, sorted ascending. Each date has its corresponding daily exchange rate, a binary variable indicating whether the date is within the week of a US Presidential result announcement day (the dataset considers the date of the official inauguration as the announcement day for the new president), and a binary variable indicating whether there has been a change of political party this election season.
   
 How many instances are there in total (of each type, if appropriate)?
-  A little more than 1700.
+  13,358 dates have been recorded.
   
 Does the dataset contain all possible instances or is it a sample (not necessarily random) of instances from a larger set? If the dataset is a sample, then what is the larger set? Is the sample representative of the larger set (for example, geographic coverage)? If so, please describe how this representativeness was validated/verified. If it is not representative of the larger set, please describe why not (for example, to cover a more diverse range of instances, because instances were withheld or unavailable).
-  All individuals elected or appointed to the Australian Federal Parliament are in the dataset.
+  The dataset takes the common date between maximum date range for FRED's exchange rate and past US inauguration dates.
 
 What data does each instance consist of? “Raw” data (for example, unprocessed text or images) or features? In either case, please provide a description.
-  Each instance consists of biographical information such as birthdate, or political information, such as political party membership.
+  Each instance consists of the respective date, exchange rate in numeric value, and two binary indicators detailed above.
   
 Is there a label or target associated with each instance? If so, please provide a description.
-  Yes there is a unique key comprising the surname and year of birth, with a few individuals needing additional demarcation.
+  Yes the date values are unique for each instance.
   
 Is any information missing from individual instances? If so, please provide a description, explaining why this information is missing (for example, because it was unavailable). This does not include intentionally removed information, but might include, for example, redacted text.
-  Birthdate is not available in all cases, especially earlier in the dataset.
+  Exchange rates are not available for all dates within the range, some dates have been droped due to exchange rate being the response variable (estimate).
   
 Are relationships between individual instances made explicit (for example, users’ movie ratings, social network links)? If so, please describe how these relationships are made explicit.
-  Yes, through the uniqueID.
+  Yes, through the unique dates. Each date within the range will appear no more than once in the dataset.
   
 Are there recommended data splits (for example, training, development/validation, testing)? If so, please provide a description of these splits, explaining the rationale behind them.
   No.
   
-Are there any errors, sources of noise, or redundancies in the dataset? If so, please provide a description.
-  There is some uncertainty about cabinet and ministries. For instance, different sources differ. There is also a little bit of uncertainty about birthdates.
-  
 Is the dataset self-contained, or does it link to or otherwise rely on external resources (for example, websites, tweets, other datasets)? If it links to or relies on external resources, a) are there guarantees that they will exist, and remain constant, over time; b) are there official archival versions of the complete dataset (that is, including the external resources as they existed at the time the dataset was created); c) are there any restrictions (for example, licenses, fees) associated with any of the external resources that might apply to a dataset consumer? Please provide descriptions of all external resources and any restrictions associated with them, as well as links or other access points, as appropriate.
-  Self-contained.
+  Exchange Rate between CAD & USD gathered from [FRED] (https://fred.stlouisfed.org/series/DEXCAUS) 
+
+  US Presidential Election Result data gathered from [United States Census Bureau](https://www.census.gov/content/dam/Census/library/visualizations/2021/comm/inauguration-day.pdf), cross checked with data from [Frank LaRose Ohio Secretary of State](https://www.ohiosos.gov/elections/election-results-and-data/historical-election-comparisons/presidents-of-the-united-states-of-america/) website to ensure accuracy.
   
 Does the dataset contain data that might be considered confidential (for example, data that is protected by legal privilege or by doctor-patient confidentiality, data that includes the content of individuals’ non-public communications)? If so, please provide a description.
   No, all data were gathered from public sources.
@@ -53,13 +52,13 @@ Does the dataset contain data that, if viewed directly, might be offensive, insu
   No.
   
 Does the dataset identify any sub-populations (for example, by age, gender)? If so, please describe how these subpopulations are identified and provide a description of their respective distributions within the dataset.
-  Yes, age and gender.
+  No.
 
 Is it possible to identify individuals (that is, one or more natural persons), either directly or indirectly (that is, in combination with other data) from the dataset? If so, please describe how.
-  Yes, individuals are identified by name.
+  The dataset does not concern any individual.
 
 Does the dataset contain data that might be considered sensitive in any way (for example, data that reveals race or ethnic origins, sexual orientations, religious beliefs, political opinions or union memberships, or locations; financial or health data; biometric or genetic data; forms of government identification, such as social security numbers; criminal history)? If so, please provide a description.
-  The dataset contains sensitive information, such as political membership, however this is all public knowledge as they are federal politicians.
+  The dataset contains sensitive information, such as past US president inauguration dates, however this is all public knowledge as they are federal politicians.
 
 Any other comments?
   No.

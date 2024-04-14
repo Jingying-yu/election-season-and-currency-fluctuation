@@ -14,6 +14,7 @@ The repo is structured as:
 
 -   `data/raw_data` contains the raw data as obtained from FRED, United States Census Bureau and Frank LaRose Ohio Secretary of State.
 -   `data/analysis_data` contains the cleaned dataset that was constructed.
+-   `data/datasheet` contains the datasheet for the final dataset used for analysis.
 -   `model` contains fitted models.
 -   `other` contains relevant literature, details about LLM chat interactions, and sketches.
 -   `paper` contains the files used to generate the paper, including the Quarto document and reference bibliography file, as well as the PDF of the paper.
