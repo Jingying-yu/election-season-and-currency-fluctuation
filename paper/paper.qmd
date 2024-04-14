@@ -74,7 +74,7 @@ exchange_inaug |>
 ```
 
 ### Construction of Inauguration Week
-
+$$Day1 \hspace{5mm} Day2 \hspace{5mm}  Day3 \hspace{7mm}  Inauguration\ Day \hspace{7mm} Day5 \hspace{5mm} Day6 \hspace{5mm} Day7$$
 
 
 # Model {#sec-model}
@@ -154,6 +154,11 @@ modelsummary::modelsummary(
 
 ## Explaination for small R^2
 ```{r}
+#| label: fig-size_visual
+#| fig-cap: Estimate average change in Exchange Rate
+#| echo: false
+#| warning: false
+#| message: false
 colors <- c("No Inauguration Announcement" = "yellow", "Inauguration Announcement" = "blue")
 
 exchange_inaug |>
