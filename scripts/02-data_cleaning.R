@@ -83,10 +83,10 @@ for(i in 1:nrow(cleaned_inauguration)) {
 
 
 #### Save data ####
-# write_csv(cleaned_exchange_rate, "data/analysis_data/cleaned_exchange_rate.csv")
+write_csv(cleaned_exchange_rate, "data/analysis_data/cleaned_exchange_rate.csv")
 write_parquet(cleaned_exchange_rate, "data/analysis_data/cleaned_exchange_rate.parquet")
 
-# write_csv(cleaned_inauguration, "data/analysis_data/cleaned_inauguration.csv")
+write_csv(cleaned_inauguration, "data/analysis_data/cleaned_inauguration.csv")
 write_parquet(cleaned_inauguration, "data/analysis_data/cleaned_inauguration.parquet")
 
 write_csv(exchange_inaug, "data/analysis_data/exchange_inaug.csv")
