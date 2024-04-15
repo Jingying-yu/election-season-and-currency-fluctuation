@@ -31,28 +31,12 @@ inaug_model <-
   )
 
 
-# Attempt alternative RDD approach, ABANDONED
-#inaug_period_model <-
-#  stan_glm(
-#    formula = exchange_rate ~ date + inauguration_period,
-#    data = inaug_period_exchange,
-#    family = gaussian(),
-#    prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
-#    prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
-#    prior_aux = exponential(rate = 1, autoscale = TRUE),
-#   seed = 21
-#  )
+
+
 
 #### Save model ####
 saveRDS(
   inaug_model,
   file = "models/inaug_model.rds"
 )
-
-
-# alternative approach, ABANDONED
-#saveRDS(
-#  inaug_period_model,
-#  file = "models/inaug_period_model.rds"
-#)
 

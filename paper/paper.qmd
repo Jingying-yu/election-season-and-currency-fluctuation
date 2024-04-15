@@ -30,14 +30,20 @@ library(arrow)
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+USD is one of the most popular currency in circulation today. As a foreign buyer of USD product, the final price can vary greatly depending on the exchange rate between one's local currency and USD. Fluctuation of exchange rate can be attributed to multiple different factors. For example the difference in interest rate between two countries, inflation rate, etc. This paper will focus on one particular aspect that contributes to the change in USD exchange rate: the expectation of the populous on the future of the United States, perceived through the results of the US Presidential Election.
 
-The remainder of this paper is structured as follows. @sec-data....
+This paper seeks to explore the effect that the US Presidential Election result announcements have on USD interest rate. USD v.s. CAD exchange rate from 1971 to 2024 is pulled from the @FRED website, and past presidential election results and inauguration dates are gathered and double-checked through @Cencus and @Ohio. The estimand of the paper is how the announcement and inauguration of a new US president, and how a change in political party, influence the USD exchange rate.
 
+The result of our analysis indicates that the announcement and inauguration of a new US president has an average negative effects on USD exchange rate within the time frame of 1971 to 2024. If a change of political party has occured for the new election season, where the leading party this season is different from the previous, then an average positive effect occurs. The magnitude of effect for the two factors suggest that, if the new president belongs to a different party than the previous president, then the inauguration anncouncement will have a net positive effect on USD exchange rate. 
 
 Analyses and findings in this paper are structured into several sections: @sec-data -- Data, @sec-model – Model, @sec-results -- Results, and @sec-discussion -- Discussion. The Data section examines all datasets and variables kept for analysis, followed by an explanation of their data cleaning processes. The Model section defines linear models used for further analysis, explain its components, and presents model justifications. The Result section focuses on visualizing and presenting the model results through data presented in Data section. The Discussion section further evaluate the interpretations behind the model results presented in the previous section, and touches on any weaknesses and next steps.
 
 # Data {#sec-data}
+
+The USD exchange rate data, denoted DEXCAUS [@Federal_Reserve], is obtained through the FRED website [@FRED]. The source of the dataset is the US Board of Governors of the Federal Reserve System [@Federal_Reserve]. The past US president inauguration dates are pulled from the US Census Bureau [@Census] and cross-referenced with Frank LaRose Ohio Secretary of State [@Ohio].
+
+Data is cleaned and analyzed using the open source statistical programming language R [@citeR] and supporting packages tidyverse [@tidyverse], janitor [@janitor], rstanarm [@rstanarm], arrow [@arrow], ggplot2 [@ggplot2], and knitr [@knitr], with additional help from Microsoft Excel [@citeExcel]. Detailed description of each dataset can be found in the subsections below.
+
 
 ## Data on Exchange Rate
 
@@ -53,7 +59,7 @@ exchange_inaug |>
     x = date,
     y = exchange_rate
   )) +
-  geom_line() +
+  geom_line() + theme_minimal() +
   labs(
     x = "Year",
     y = "Exchange Rate: USD to CAD (Base Currency: USD)",
@@ -88,13 +94,12 @@ knitr::kable(sample_tbl, col.names = c("Date", "Exchange Rate", "Inauguration Pe
 
 # Model {#sec-model}
 
-The goal of our modelling strategy is twofold. Firstly,...
+The goal of our modelling strategy is twofold. Firstly, a binary indicator variable will estimate the magnitude of effect the US presidential announcement and inauguration have on the US exchange rate. Secondly, the influence of a change in political party between the an US president and their predecessor will also be estimated.
 
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+Magnitude of effect created by the helpline efforts can be estimated through linear models. Gaussian regression model is best suited for our analytical purposes. Other generalized linear models such as Logistic and Multilevel are not considered due to the nature of the variables in interest. Logistic regression model requires data that yields either an **yes** or **no** result, whereas multilevel model require more complexity between variables. Due to the nature of the Poisson function, the Poisson model requires count variable not available for our dataset.
+Background details and diagnostics are included in [Appendix -@sec-model-details].
 
 ## Model set-up
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
 
 $$y_i|\mu_i, \sigma \sim \mbox{Normal}(\mu_i, \sigma)$$
 
@@ -118,13 +123,6 @@ Where:
 
 
 We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
-
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
 # Results {#sec-results}
