@@ -27,14 +27,13 @@ library(ggplot2)
 library(arrow)
 ```
 
-
 # Introduction
 
-USD is one of the most popular currency in circulation today. As a foreign buyer of USD product, the final price can vary greatly depending on the exchange rate between one's local currency and USD. Fluctuation of exchange rate can be attributed to multiple different factors. For example the difference in interest rate between two countries, inflation rate, etc. This paper will focus on one particular aspect that contributes to the change in USD exchange rate: the expectation of the populous on the future of the United States, perceived through the results of the US Presidential Election.
+USD is one of the most popular currency in circulation today. As a foreign buyer of USD product, the final price can vary greatly depending on the exchange rate between one's local currency and USD. Fluctuation of exchange rate can be attributed to multiple different factors. For example the difference in interest rate between two countries, inflation rate, etc. This paper will focus on one particular aspect that contributes to the change in USD exchange rate: the expectation of the populous on the future of the United States, perceived through the results of the US Presidential Election. The election of a new president is often one of the biggest political shift for a country, shifts in stratergies and focus will cause many people to reevaluate their faith for their country.
 
 This paper seeks to explore the effect that the US Presidential Election result announcements have on USD interest rate. USD v.s. CAD exchange rate from 1971 to 2024 is pulled from the @FRED website, and past presidential election results and inauguration dates are gathered and double-checked through @Cencus and @Ohio. The estimand of the paper is how the announcement and inauguration of a new US president, and how a change in political party, influence the USD exchange rate.
 
-The result of our analysis indicates that the announcement and inauguration of a new US president has an average negative effects on USD exchange rate within the time frame of 1971 to 2024. If a change of political party has occured for the new election season, where the leading party this season is different from the previous, then an average positive effect occurs. The magnitude of effect for the two factors suggest that, if the new president belongs to a different party than the previous president, then the inauguration anncouncement will have a net positive effect on USD exchange rate. 
+The result of our analysis indicates that the announcement and inauguration of a new US president has an average negative effects on USD exchange rate within the time frame of 1971 to 2024. If a change of political party has occured for the new election season, where the leading party this season is different from the previous, then an average positive effect occurs. The magnitude of effect for the two factors suggest that, if the new president belongs to a different party than the previous president, then the inauguration anncouncement will have a net positive effect on USD exchange rate.
 
 Analyses and findings in this paper are structured into several sections: @sec-data -- Data, @sec-model – Model, @sec-results -- Results, and @sec-discussion -- Discussion. The Data section examines all datasets and variables kept for analysis, followed by an explanation of their data cleaning processes. The Model section defines linear models used for further analysis, explain its components, and presents model justifications. The Result section focuses on visualizing and presenting the model results through data presented in Data section. The Discussion section further evaluate the interpretations behind the model results presented in the previous section, and touches on any weaknesses and next steps.
 
@@ -44,8 +43,10 @@ The USD exchange rate data, denoted DEXCAUS [@Federal_Reserve], is obtained thro
 
 Data is cleaned and analyzed using the open source statistical programming language R [@citeR] and supporting packages tidyverse [@tidyverse], janitor [@janitor], rstanarm [@rstanarm], arrow [@arrow], ggplot2 [@ggplot2], and knitr [@knitr], with additional help from Microsoft Excel [@citeExcel]. Detailed description of each dataset can be found in the subsections below.
 
-
 ## Data on Exchange Rate
+
+The DEXCAUS [@Federal_Reserve] dataset includes the daily exchange rate between USD and CAD (base USD = 1) from 1971-01-04 to\
+2024-03-29 (date the dataset is downloaded for the purpose of the paper). Raw data contains only the date and the corresponding exchange rate of the day. Exchange rate in this dataset is used as the estimate of this paper.
 
 ```{r}
 #| label: fig-exchange
@@ -67,9 +68,9 @@ exchange_inaug |>
   )
 ```
 
-## Data on Election Results
+## Data on Election Results {#sec-election}
 
-### Selection of Data Source
+In order to measure the effect that the population's faith to their country have on exchange rate, this paper focuses on one particular political event that will quickly change the population's expectation for their country in a short amount of time, the presidential election. Analysis will be focused on the election result announcement and the inauguration period (please see specific definition of the term inauguration period in the subset below @sec-inauguration). Data of past election results and inauguration dates are obtained through the US Census Bureau [@Census] and cross-referenced with Frank LaRose Ohio Secretary of State [@Ohio] for accuracy. The final dataset use the inauguration dates and political party information to determine the effect of having a new president on the USD exchange rate.
 
 ```{r}
 #| label: tbl-inauguration
@@ -77,11 +78,19 @@ exchange_inaug |>
 #| echo: false
 cleaned_inauguration <- read_csv(here::here("data/analysis_data/cleaned_inauguration.csv"), show_col_types = FALSE)
 
-knitr::kable(cleaned_inauguration, col.names = c("President", "Party", "Inauguration Date", "Change Party"), align = c("c", "c", "c", "c"))
+select_inauguration <- cleaned_inauguration |> select(-change_party)
+
+knitr::kable(select_inauguration, col.names = c("President", "Party", "Inauguration Date"), align = c("c", "c", "c"))
 ```
 
-### Construction of Inauguration Week
-$$Day1 \hspace{5mm} Day2 \hspace{5mm}  Day3 \hspace{7mm}  \textbf{Inauguration Day} \hspace{7mm} Day5 \hspace{5mm} Day6 \hspace{5mm} Day7$$
+### Construction of Inauguration Week {#sec-inauguration}
+
+Using the inauguration date information present in the dataset, we will construct an announcement period, allowing the news of the result to sink in and give time for the exchange rate to react to the announcement. This period needs to be relatively short to ensure that the change in exchange rate is causal by the election result announcement and **only** the announcement.
+
+The final construction will be referred to as the *inauguration week* for the remainder of this paper. The inauguration week is a +/-3 days week centered on the original inauguration date for each past US president. $$Day1 \hspace{5mm} Day2 \hspace{5mm}  Day3 \hspace{7mm}  \textbf{Inauguration Day} \hspace{7mm} Day5 \hspace{5mm} Day6 \hspace{5mm} Day7$$
+
+## Final Dataset
+The final dataset combines the date and exchange rate columns from the DEXCAUS [@Federal_Reserve] dataset and uses the inauguration week (constructed through the inauguration dates from the election results dataset, @sec-election). The column *Inauguration Period* has a value of 1 if the date is within the inauguration week and 0 otherwise. A new column *Change Party* is added, it receives a value of 1 if the political party of the new president is different from the previous president's and 0 otherwise.
 ```{r}
 #| label: tbl-exchange_inaug
 #| tbl-cap: Sample of the final dataset used for analysis
@@ -91,13 +100,11 @@ sample_tbl <- exchange_inaug |> filter(date >= "1977-01-12" & date <= "1977-01-1
 knitr::kable(sample_tbl, col.names = c("Date", "Exchange Rate", "Inauguration Period", "Change Party"), align = c("c", "c", "c", "c"))
 ```
 
-
 # Model {#sec-model}
 
 The goal of our modelling strategy is twofold. Firstly, a binary indicator variable will estimate the magnitude of effect the US presidential announcement and inauguration have on the US exchange rate. Secondly, the influence of a change in political party between the an US president and their predecessor will also be estimated.
 
-Magnitude of effect created by the helpline efforts can be estimated through linear models. Gaussian regression model is best suited for our analytical purposes. Other generalized linear models such as Logistic and Multilevel are not considered due to the nature of the variables in interest. Logistic regression model requires data that yields either an **yes** or **no** result, whereas multilevel model require more complexity between variables. Due to the nature of the Poisson function, the Poisson model requires count variable not available for our dataset.
-Background details and diagnostics are included in [Appendix -@sec-model-details].
+Magnitude of effect created by the helpline efforts can be estimated through linear models. Gaussian regression model is best suited for our analytical purposes. Other generalized linear models such as Logistic and Multilevel are not considered due to the nature of the variables in interest. Logistic regression model requires data that yields either an **yes** or **no** result, whereas multilevel model require more complexity between variables. Due to the nature of the Poisson function, the Poisson model requires count variable not available for our dataset. Background details and diagnostics are included in [Appendix -@sec-model-details].
 
 ## Model set-up
 
@@ -121,9 +128,7 @@ Where:
 
 -   $\omega_i$ is a dummy variable indicating whether a change of political party occurred in the corresponding election season. Each inauguration week receives identical value (the whole week is either all 1 or all 0). Value of 1 indicates that the elected president's political party is different from last season's president's, 0 otherwise.
 
-
 We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
 
 # Results {#sec-results}
 
@@ -158,8 +163,8 @@ modelsummary::modelsummary(
 )
 ```
 
+## Explaination for small R\^2
 
-## Explaination for small R^2
 ```{r}
 #| label: fig-size_visual
 #| fig-cap: Estimate average change in Exchange Rate
@@ -249,13 +254,11 @@ exchange_inaug |>
 
 ```
 
-
-
 # Discussion {#sec-discussion}
 
 ## Expectation of the population
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
 
 ## Change of Political Party
 
@@ -269,8 +272,7 @@ Weaknesses and next steps should also be included.
 
 \appendix
 
-# Appendix {-}
-
+# Appendix {.unnumbered}
 
 # Additional data details
 
@@ -281,7 +283,6 @@ Weaknesses and next steps should also be included.
 In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. We can see that the regression outcome from our data and the simulation created by the posterior distribution are not closely matched. This is because our predictor variables only contribute to a small section of the data (40 out of 13358 observations has inauguration_period == 1, 30 out of 13358 has change_party == 1).
 
 In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. We can see that the estimation parameters shifts minimally after taking data into account. This suggests that good prior parameters were set.
-
 
 ```{r}
 #| eval: true
@@ -308,9 +309,7 @@ posterior_vs_prior(inaug_model) +
 
 @fig-stanareyouokay-1 is a trace plot. Trace plots are often used to diagnose abnormalities of models. For both plots, lines are oscillating vertically and maintains an overall horizontal trend. This suggests that there is nothing out of the ordinary for our model.
 
-
 @fig-stanareyouokay-2 is a Rhat plot. Rhat plot is a valuable tool for assessing convergence in Bayesian regression models, helping ensure the reliability and validity of the model's inference results. Both both plots, all data points are close to 1. This suggest that there is nothing out of the ordinary for our model.
-
 
 ```{r}
 #| echo: false
@@ -327,11 +326,6 @@ plot(inaug_model, "trace")
 plot(inaug_model, "rhat")
 ```
 
-
-
 \newpage
 
-
 # References
-
-
