@@ -6,7 +6,7 @@ author:
 thanks: "Code and data are available at: https://github.com/Jingying-yu/election-season-and-currency-fluctuation.git"
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This paper analyzes the effect of US Presidential Election Announcement and a change of political party on the USD exchange rate. Daily exchange rates gathered from FRED and past presidential inauguration dates from multiple government websites are used in a generalized linear regression model to estimate the effects. We find that election result announcement has an average negative effect on USD exchange rate whereas a change of political party contributes positively with a slightly larger magnitude. Our result suggests that exchange USD for another currency closly after a Presidential election with a change of political party could be profitable."
 format: pdf
 number-sections: true
 toc: true
@@ -35,6 +35,7 @@ You can and should cross-reference sections and sub-sections. We use @citeR and 
 The remainder of this paper is structured as follows. @sec-data....
 
 
+Analyses and findings in this paper are structured into several sections: @sec-data -- Data, @sec-model – Model, @sec-results -- Results, and @sec-discussion -- Discussion. The Data section examines all datasets and variables kept for analysis, followed by an explanation of their data cleaning processes. The Model section defines linear models used for further analysis, explain its components, and presents model justifications. The Result section focuses on visualizing and presenting the model results through data presented in Data section. The Discussion section further evaluate the interpretations behind the model results presented in the previous section, and touches on any weaknesses and next steps.
 
 # Data {#sec-data}
 
