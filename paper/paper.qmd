@@ -249,7 +249,7 @@ exchange_inaug |>
     method = "lm",
     aes(color = "Inauguration Announcement"),
     formula = "y ~ x"
-  ) + scale_color_manual(values = colors) +
+  ) + scale_color_manual(values = colors) + theme_minimal() +
   labs(
     x = "Date",
     y = "USD v.s. CAD Exchange Rate",
