@@ -131,7 +131,10 @@ We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use
 
 # Results {#sec-results}
 
-Our results are summarized in @tbl-modelresults.
+@tbl-modelresults shows the coefficients of the predictor variables of our Model. We are concerned with the top half of the table, as it provides the values of the intercept representing the average exchange rate during non-inauguration weeks the as well as the coefficient representing effect size of inauguration periods and changes in political party. 
+
+Looking at the values, we see that, outside of inauguration announcement weeks, the average exchange rate between USD and CAD is 1.23 between the years 1971 to 2024. When a new US presidental is anncouncement and subsequently inaugurated, an average of 0.14 drop occurs to the USD exchange rate. However, looking at the third coefficient, the 0.18 coefficient for the *change_party* variable suggests that, if a change of political party occurred during the current election season, then the US exchange rate will increase by 0.18 unit. This suggests that the net effect of announcing a new president who comes from a different political party than their immediate predecessor will, on average, increase the USD exchange rate by 0.04.
+
 
 ```{r}
 #| echo: false
@@ -163,10 +166,13 @@ modelsummary::modelsummary(
 ```
 
 ## Explaination for small R\^2
+The model summary table @tbl-modelresults shows an extremely small R^2 value. The R^2 value is traditioally used to indicates the explanatory power of the model, that is, how trustworthy the model is on estimating the relationship between the estimand and the estimate.
+
+Many factors contributes to the R^2 value, one of the most prominent factor in our case is the effect size of our estimand. As mentioned in the introduction section, the estimand of this paper is how the announcement and inauguration of a new US president, and how a change in political party, influence the USD exchange rate. There are 13358 observations in the final dataset used for modelling, out of all of these observations, 40 of them contributes to the measurement of the effect of inauguration anncouncement, and 30 on the effect of a change in political party. In a practical sense, only 0.3% of the data are used to estimate the effect of the inauguration anncouncment and even less on the change of party. This contributes the the low R^2 value significantly. Dispite this, the model has still proven to be a good fit (see @sec-model-details), the predictors are still valuable despite the low R-squared. @fig-size_visual visualizes the effect size (in blue) and the remaining oberservations outside of the inauguration periods.
 
 ```{r}
 #| label: fig-size_visual
-#| fig-cap: Estimate average change in Exchange Rate
+#| fig-cap: Effect size visualization
 #| echo: false
 #| warning: false
 #| message: false
