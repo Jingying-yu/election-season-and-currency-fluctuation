@@ -1,12 +1,12 @@
 ---
 title: "USD Exchange Rate decreases during Election Anncouncement Period"
-subtitle: "Analysis of USD Exchange Rate Fluctuation during Inaugurtion week"
+subtitle: "Analysis of USD Exchange Rate Fluctuation during Inauguration week"
 author: 
   - Sandy Yu
 thanks: "Code and data are available at: https://github.com/Jingying-yu/election-season-and-currency-fluctuation.git"
 date: today
 date-format: long
-abstract: "This paper analyzes the effect of US Presidential Election Announcement and a change of political party on the USD exchange rate. Daily exchange rates gathered from FRED and past presidential inauguration dates from multiple government websites are used in a generalized linear regression model to estimate the effects. We find that election result announcement has an average negative effect on USD exchange rate whereas a change of political party contributes positively with a slightly larger magnitude. Our result suggests that exchange USD for another currency closly after a Presidential election with a change of political party could be profitable."
+abstract: "This paper analyzes the effect of US Presidential Election Announcement and a change of political party on the USD exchange rate. Daily exchange rates gathered from FRED and past presidential inauguration dates from multiple government websites are used in a generalized linear regression model to estimate the effects. We find that election result announcement has an average negative effect on USD exchange rate whereas a change of political party contributes positively with a slightly larger magnitude. Our result suggests that exchange USD for another currency closly after a Presidential election with a change of political party could be profitable, therefore it might be profitable to buy in USD during election result anncouncement weeks depending on the political party of the new president."
 format: pdf
 number-sections: true
 toc: true
@@ -29,9 +29,9 @@ library(arrow)
 
 # Introduction
 
-USD is one of the most popular currency in circulation today. As a foreign buyer of USD product, the final price can vary greatly depending on the exchange rate between one's local currency and USD. Fluctuation of exchange rate can be attributed to multiple different factors. For example the difference in interest rate between two countries, inflation rate, etc. This paper will focus on one particular aspect that contributes to the change in USD exchange rate: the expectation of the populous on the future of the United States, perceived through the results of the US Presidential Election. The election of a new president is often one of the biggest political shift for a country, shifts in stratergies and focus will cause many people to reevaluate their faith for their country.
+USD is one of the most popular currencies in circulation today. As a foreign buyer of USD product, the final price can vary greatly depending on the exchange rate between one's local currency and USD. Fluctuation of exchange rate can be attributed to multiple different factors. For example the difference in interest rate between two countries, inflation rate, etc. This paper will focus on one particular aspect that contributes to the change in USD exchange rate: the expectation of the populous on the future of the United States, perceived through the results of the US Presidential Election. The election of a new president is often one of the biggest political shifts for a country, shifts in stratergies and focus will cause many people to reevaluate their faith for their country.
 
-This paper seeks to explore the effect that the US Presidential Election result announcements have on USD interest rate. USD v.s. CAD exchange rate from 1971 to 2024 is pulled from the @FRED website, and past presidential election results and inauguration dates are gathered and double-checked through @Cencus and @Ohio. The estimand of the paper is how the announcement and inauguration of a new US president, and how a change in political party, influence the USD exchange rate.
+This paper seeks to explore the effect that the US Presidential Election result announcements have on USD interest rate. USD v.s. CAD exchange rate from 1971 to 2024 is pulled from the @FRED website, and past presidential election results and inauguration dates are gathered and double-checked through @Census and @Ohio. The estimand of the paper is how the announcement and inauguration of a new US president, and how a change in political party, influence the USD exchange rate.
 
 The result of our analysis indicates that the announcement and inauguration of a new US president has an average negative effects on USD exchange rate within the time frame of 1971 to 2024. If a change of political party has occured for the new election season, where the leading party this season is different from the previous, then an average positive effect occurs. The magnitude of effect for the two factors suggest that, if the new president belongs to a different party than the previous president, then the inauguration anncouncement will have a net positive effect on USD exchange rate.
 
@@ -56,14 +56,13 @@ exchange_inaug |>
     y = exchange_rate
   )) +
   geom_line() + theme_minimal() +
-  labs(x = "Year", y = "Exchange Rate: USD to CAD (Base Currency: USD)",
-    title = "Exchange Rate from 1971 to 2024"
+  labs(x = "Year", y = "Exchange Rate: USD to CAD (Base Currency: USD)"
   )
 ```
-## Data on Exchange Rate 
+
+## Data on Exchange Rate
 
 The DEXCAUS [@Federal_Reserve] dataset includes the daily exchange rate between USD and CAD (base USD = 1) from 1971-01-04 to 2024-03-29 (date the dataset is downloaded for the purpose of the paper). Raw data contains only the date and the corresponding exchange rate of the day. Exchange rate in this dataset is used as the estimate of this paper.
-
 
 ## Data on Election Results {#sec-election}
 
@@ -131,10 +130,9 @@ We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use
 
 # Results {#sec-results}
 
-@tbl-modelresults shows the coefficients of the predictor variables of our Model. We are concerned with the top half of the table, as it provides the values of the intercept representing the average exchange rate during non-inauguration weeks the as well as the coefficient representing effect size of inauguration periods and changes in political party. 
+@tbl-modelresults shows the coefficients of the predictor variables of our Model. We are concerned with the top half of the table, as it provides the values of the intercept representing the average exchange rate during non-inauguration weeks the as well as the coefficient representing effect size of inauguration periods and changes in political party.
 
-Looking at the values, we see that, outside of inauguration announcement weeks, the average exchange rate between USD and CAD is 1.23 between the years 1971 to 2024. When a new US presidental is anncouncement and subsequently inaugurated, an average of 0.14 drop occurs to the USD exchange rate. However, looking at the third coefficient, the 0.18 coefficient for the *change_party* variable suggests that, if a change of political party occurred during the current election season, then the US exchange rate will increase by 0.18 unit. This suggests that the net effect of announcing a new president who comes from a different political party than their immediate predecessor will, on average, increase the USD exchange rate by 0.04.
-
+Looking at the values, we see that, outside of inauguration announcement weeks, the average exchange rate between USD and CAD is 1.23 between the years 1971 to 2024. When a new US presidental is announcement and subsequently inaugurated, an average of 0.14 drop occurs to the USD exchange rate. However, looking at the third coefficient, the 0.18 coefficient for the *change_party* variable suggests that, if a change of political party occurred during the current election season, then the US exchange rate will increase by 0.18 unit. This suggests that the net effect of announcing a new president who comes from a different political party than their immediate predecessor will, on average, increase the USD exchange rate by 0.04.
 
 ```{r}
 #| echo: false
@@ -165,10 +163,11 @@ modelsummary::modelsummary(
 )
 ```
 
-## Explaination for small R\^2
-The model summary table @tbl-modelresults shows an extremely small R^2 value. The R^2 value is traditioally used to indicates the explanatory power of the model, that is, how trustworthy the model is on estimating the relationship between the estimand and the estimate.
+## Explanation for small R\^2
 
-Many factors contributes to the R^2 value, one of the most prominent factor in our case is the effect size of our estimand. As mentioned in the introduction section, the estimand of this paper is how the announcement and inauguration of a new US president, and how a change in political party, influence the USD exchange rate. There are 13358 observations in the final dataset used for modelling, out of all of these observations, 40 of them contributes to the measurement of the effect of inauguration anncouncement, and 30 on the effect of a change in political party. In a practical sense, only 0.3% of the data are used to estimate the effect of the inauguration anncouncment and even less on the change of party. This contributes the the low R^2 value significantly. Dispite this, the model has still proven to be a good fit (see @sec-model-details), the predictors are still valuable despite the low R-squared. @fig-size_visual visualizes the effect size (in blue) and the remaining oberservations outside of the inauguration periods.
+The model summary table @tbl-modelresults shows an extremely small R\^2 value. The R\^2 value is traditionally used to indicates the explanatory power of the model, that is, how trustworthy the model is on estimating the relationship between the estimand and the estimate.
+
+Many factors contributes to the R\^2 value, one of the most prominent factor in our case is the effect size of our estimand. As mentioned in the introduction section, the estimand of this paper is how the announcement and inauguration of a new US president, and how a change in political party, influence the USD exchange rate. There are 13358 observations in the final dataset used for modelling, out of all of these observations, 40 of them contributes to the measurement of the effect of inauguration announcement, and 30 on the effect of a change in political party. In a practical sense, only 0.3% of the data are used to estimate the effect of the inauguration announcement and even less on the change of party. This contributes the the low R\^2 value significantly. Despite this, the model has still proven to be a good fit (see @sec-model-details), the predictors are still valuable despite the low R-squared. @fig-size_visual visualizes the effect size (in blue) and the remaining observations outside of the inauguration periods.
 
 ```{r}
 #| label: fig-size_visual
@@ -269,8 +268,8 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Weaknesses and next steps
 
-- small effect size causing low explanitory power
-- inauguration dates does NOT include presidential announcement results where the previous president gets re-elected for the next season, will cause bias in estimation.
+-   small effect size causing low explanatory power
+-   inauguration dates does NOT include presidential announcement results where the previous president gets re-elected for the next season, will cause bias in estimation.
 
 \newpage
 
