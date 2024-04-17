@@ -2,7 +2,7 @@
 
 ## Overview
 
-examine relationship between election season and currency fluctuation
+This paper examines relationship between US presidential result announcement and USD exchange rate fluctuation.
 
 Exchange Rate between CAD & USD gathered from [FRED](https://fred.stlouisfed.org/series/DEXCAUS) 
 

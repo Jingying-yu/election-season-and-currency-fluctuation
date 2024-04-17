@@ -1,5 +1,5 @@
 ---
-title: "Effect of Election on Currency Fluctuation"
+title: "USD Exchange Rate decreases during Election Anncouncement Period"
 subtitle: "Analysis of USD Exchange Rate Fluctuation during Inaugurtion week"
 author: 
   - Sandy Yu
@@ -269,7 +269,8 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
+- small effect size causing low explanitory power
+- inauguration dates does NOT include presidential announcement results where the previous president gets re-elected for the next season, will cause bias in estimation.
 
 \newpage
 
