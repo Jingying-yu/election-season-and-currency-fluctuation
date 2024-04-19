@@ -40,9 +40,6 @@ Analyses and findings in this paper are structured into several sections: @sec-d
 # Data {#sec-data}
 
 The USD exchange rate data, denoted DEXCAUS [@Federal_Reserve], is obtained through the FRED website [@FRED]. The source of the dataset is the US Board of Governors of the Federal Reserve System [@Federal_Reserve]. The past US president inauguration dates are pulled from the US Census Bureau [@Census] and cross-referenced with Frank LaRose Ohio Secretary of State [@Ohio].
-
-Data is cleaned and analyzed using the open source statistical programming language R [@citeR] and supporting packages tidyverse [@tidyverse], janitor [@janitor], rstanarm [@rstanarm], arrow [@arrow], ggplot2 [@ggplot2], and knitr [@knitr], with additional help from Microsoft Excel [@citeExcel]. Detailed description of each dataset can be found in the subsections below.
-
 ```{r}
 #| label: fig-exchange
 #| fig-cap: Exchange Rate from 1971 to 2024
@@ -59,14 +56,15 @@ exchange_inaug |>
   labs(x = "Year", y = "Exchange Rate: USD to CAD (Base Currency: USD)"
   )
 ```
+Data is cleaned and analyzed using the open source statistical programming language R [@citeR] and supporting packages tidyverse [@tidyverse], janitor [@janitor], rstanarm [@rstanarm], arrow [@arrow], ggplot2 [@ggplot2], and knitr [@knitr], with additional help from Microsoft Excel [@citeExcel]. Detailed description of each dataset can be found in the subsections below.
 
 ## Data on Exchange Rate
 
-The DEXCAUS [@Federal_Reserve] dataset includes the daily exchange rate between USD and CAD (base USD = 1) from 1971-01-04 to 2024-03-29 (date the dataset is downloaded for the purpose of the paper). Raw data contains only the date and the corresponding exchange rate of the day. Exchange rate in this dataset is used as the estimate of this paper.
+The DEXCAUS [@Federal_Reserve] dataset includes the daily exchange rate between USD and CAD (base USD = 1) from 1971-01-04 to 2024-03-29 (date the dataset is downloaded for the purpose of the paper). Raw data contains only the date and the corresponding exchange rate of the day. Exchange rate in this dataset is used as the estimate of this paper. See @fig-exchange for visualization of this dataset.
 
 ## Data on Election Results {#sec-election}
 
-In order to measure the effect that the population's faith to their country have on exchange rate, this paper focuses on one particular political event that will quickly change the population's expectation for their country in a short amount of time, the presidential election. Analysis will be focused on the election result announcement and the inauguration period (please see specific definition of the term inauguration period in the subsection below @sec-inauguration). Data of past election results and inauguration dates are obtained through the US Census Bureau [@Census] and cross-referenced with Frank LaRose Ohio Secretary of State [@Ohio] for accuracy. The final dataset use the inauguration dates and political party information to determine the effect of having a new president on the USD exchange rate.
+In order to measure the effect that the population's faith to their country have on exchange rate, this paper focuses on one particular political event that will quickly change the population's expectation for their country in a short amount of time, the presidential election. Analysis will be focused on the election result announcement and the inauguration period (please see specific definition of the term inauguration period in the subsection below @sec-inauguration). Data of past election results and inauguration dates are obtained through the US Census Bureau [@Census] and cross-referenced with Frank LaRose Ohio Secretary of State [@Ohio] for accuracy. The final dataset use the inauguration dates and political party information to determine the effect of having a new president on the USD exchange rate. See @tbl-inauguration for a sample of the election result dataset.
 
 ```{r}
 #| label: tbl-inauguration
@@ -87,7 +85,7 @@ The final construction will be referred to as the *inauguration week* for the re
 
 ## Final Dataset
 
-The final dataset combines the date and exchange rate columns from the DEXCAUS [@Federal_Reserve] dataset and uses the inauguration week (constructed through the inauguration dates from the election results dataset, @sec-election). The column *Inauguration Period* has a value of 1 if the date is within the inauguration week and 0 otherwise. A new column *Change Party* is added, it receives a value of 1 if the political party of the new president is different from the previous president's and 0 otherwise.
+The final dataset, @tbl-exchange_inaug, combines the date and exchange rate columns from the DEXCAUS [@Federal_Reserve] dataset and uses the inauguration week (constructed through the inauguration dates from the election results dataset, @sec-election). The column *Inauguration Period* has a value of 1 if the date is within the inauguration week and 0 otherwise. A new column *Change Party* is added, it receives a value of 1 if the political party of the new president is different from the previous president's and 0 otherwise.
 
 ```{r}
 #| label: tbl-exchange_inaug
@@ -132,7 +130,9 @@ We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use
 
 @tbl-modelresults shows the coefficients of the predictor variables of our Model. We are concerned with the top half of the table, as it provides the values of the intercept representing the average exchange rate during non-inauguration weeks the as well as the coefficient representing effect size of inauguration periods and changes in political party.
 
-Looking at the values, we see that, outside of inauguration announcement weeks, the average exchange rate between USD and CAD is 1.23 between the years 1971 to 2024. When a new US presidental is announcement and subsequently inaugurated, an average of 0.14 drop occurs to the USD exchange rate. However, looking at the third coefficient, the 0.18 coefficient for the *change_party* variable suggests that, if a change of political party occurred during the current election season, then the US exchange rate will increase by 0.18 unit. This suggests that the net effect of announcing a new president who comes from a different political party than their immediate predecessor will, on average, increase the USD exchange rate by 0.04.
+Looking at the values, we see that, outside of inauguration announcement weeks, the average exchange rate between USD and CAD is 1.23 between the years 1971 to 2024. When a new US president is announced and subsequently inaugurated, an average of 0.14 drop occurs to the USD exchange rate. In practical terms, this means that a 11% drop from the average exchange rate of 1.23 occured in the span of 1 week due to the announcement.
+
+However, looking at the third coefficient, the 0.18 coefficient for the *change_party* variable suggests that, if a change of political party occurred during the current election season, then the US exchange rate will increase by 0.18 unit. This suggests that the net effect of announcing a new president who comes from a different political party than their immediate predecessor will, on average, increase the USD exchange rate by 0.04.
 
 ```{r}
 #| echo: false
@@ -261,15 +261,32 @@ exchange_inaug |>
 # Discussion {#sec-discussion}
 
 ## Expectation of the population
+Population expectation plays a significant role as a key driver of exchange rate fluctuations in the field of economics.  However, the term expectation is often ambiguous and hard to quantify. This paper seeks to explore the tangible impact of expectations on exchange rates by focusing on a specific, highly influential event: the U.S. presidential election. This particular event was chosen for its prominence and its profound effect on national sentiment. It stands out due to its high engagement levels among U.S. citizens, with a notable participation rate of 66.8% among eligible voters aged 18 and older in the 2020 presidential election, according to data referenced from @2020Election (surveys conducted by @Census2020Data).
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this.
+The presidential election is an optimal choice for analysis not only because of its widespread recognition and significant voter turnout but also due to its measurable impact on economic indicators such as the exchange rate. As detailed in the section @sec-results of this paper, there is an observable pattern related to changes in political leadership and their effects on currency valuation. Specifically, the inauguration week of a new president who belongs to the same political party as their immediate predecessor typically sees an decrease in the exchange rate by 11% compared to the exchange rate at non-inauguration weeks. Conversely, a change in the ruling party correlates with an average net increase of 3.25% in the exchange rate. Viewing an increase in the exchange rate as an indicator of growing confidence in the country's direction, these findings suggest several implications about public sentiment and economic expectations.
 
-## Change of Political Party
+
+## Ideology of Political Parties
+
+During election seasons, the focus isn't just on the incumbent president but also heavily on the speeches and promises made by presidential candidates. These candidates not only present their personal ideologies but also propose new policies and legislative changes they plan to implement if elected.
+
+Candidates from the same political party often share core values and ideologies, yet they might differ in their specific priorities and proposed policies. For instance, it's common for all Democratic candidates to support initiatives related to refugee and immigration issues, although their specific approaches to these issues can vary. When candidates from the same party are elected, it typically indicates that they will continue the country's current trajectory, particularly in how the U.S. handles international affairs. Electing a candidate from the same party as the incumbent suggests that voters are generally pleased with the current direction of the nation and wish to maintain continuity.
+
+On the other hand, when a candidate from a different political party is elected, it usually signifies that a significant portion of the electorate believes the country needs a new direction. This desire for change is reflected in the public's support for the candidate's proposed shifts in political focus and new policies. This can lead to a change in how the U.S. is perceived both domestically and internationally.
+
+The election of a president from a different party than their predecessor often results in an increase in the USD exchange rate. This phenomenon can occur because the financial markets react to the potential for substantial policy changes that may foster economic growth or improve the fiscal outlook of the country. Investors might anticipate that new policies will be beneficial for business and economic stability, which can lead to increased foreign investment and a stronger dollar. The promise of a fresh approach and new leadership can instill confidence among investors and the business community, leading to positive fluctuations in the currency's value. 
+
+
+## External Shifts
+The influence of expectation extends beyond just the domestic population of the United States. It also significantly affects foreign stakeholders such as holders of U.S. government bonds and owners of international companies that contribute to the U.S. GDP. These groups are deeply interested in the stability and policies of the U.S. economy because changes can directly impact their investments and business operations. As such, their perceptions and expectations about the U.S. economy can lead to fluctuations in the USD exchange rates.
+
+Furthermore, the inauguration of a new president can lead to shifts in international relations and economic policies. This change in leadership can create uncertainty about future policies, which might affect existing collaborations and agreements made during the previous administration. For example, a new president might reconsider or revise international trade agreements, which could potentially disrupt established economic partnerships. Such uncertainties may lead to instability in exchange rates as investors and foreign businesses try to predict and adapt to the new policy environment. Political dynamics in the United States can have a far-reaching impact on global economic interactions and the overall behavior of the USD on the international stage.
 
 ## Weaknesses and next steps
+The proposed model, while insightful, has several limitations that need addressing to enhance its accuracy and applicability. One of the primary weaknesses is its small effect size, which contributes to its low explanatory power, making it less effective in predicting USD exchange rate fluctuations around U.S. presidential inaugurations. Additionally, the model does not account for inauguration dates following the re-election of a sitting president, which can introduce bias into the estimations. Furthermore, it overlooks the constitutional limit that prevents a president from being elected more than twice consecutively, which could skew results where such scenarios are relevant.
 
--   small effect size causing low explanatory power
--   inauguration dates does NOT include presidential announcement results where the previous president gets re-elected for the next season, will cause bias in estimation.
+Moving forward, the next steps to refine the model include a comprehensive collection of all election announcement dates for past U.S. presidents who have been re-elected consecutively. This data will be integrated into the model to provide a more accurate reflection of political impacts on economic indicators. Additionally, it's crucial to isolate and eliminate the influence of other significant events that historically affect the USD exchange rate. By addressing these points, the data can offer more reliable and significant insights into the dynamics between presidential elections and economic fluctuations.
+
 
 \newpage
 

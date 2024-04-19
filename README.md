@@ -2,7 +2,7 @@
 
 ## Overview
 
-This paper examines relationship between US presidential result announcement and USD exchange rate fluctuation.
+Fluctuation of exchange rate can be attributed to multiple different factors. This paper will focus on one particular aspect that contributes to the change in USD exchange rate: the expectation of the populous on the future of the United States, perceived through the results of the US Presidential Election. The paper will examine relationship between US presidential result announcement and USD exchange rate fluctuation.
 
 Exchange Rate between CAD & USD gathered from [FRED](https://fred.stlouisfed.org/series/DEXCAUS) 
 
